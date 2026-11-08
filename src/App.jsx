@@ -254,13 +254,8 @@ export default function App() {
           sisterName={config.sisterName}
         />
 
-        {/* 7. Achievement Tracker */}
+        {/* 7. Achievement Tracker (Manual checkoff & custom milestones) */}
         <AchievementTracker
-          badges={evaluatedBadges}
-          chaptersCompletedCount={chaptersCompletedCount}
-          totalChaptersCount={totalChaptersCount}
-          tasksCompletedCount={tasksCompletedCount}
-          streak={config.studyStreak}
           sisterName={config.sisterName}
         />
 
