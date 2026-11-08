@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, Calendar, CheckCircle2, Sparkles, ChevronRight, AlertCircle, Heart } from 'lucide-react';
-import { triggerPinkConfetti } from '../utils/confetti';
+import { Clock, Calendar, Sparkles, ChevronRight, Calculator } from 'lucide-react';
 import { sound } from '../utils/sound';
 
 export default function ExamCountdown({
@@ -10,14 +9,14 @@ export default function ExamCountdown({
   allCompleted,
   onOpenTimetableEdit
 }) {
+  // Default to the first exam (Mathematics)
   const [selectedSubjectId, setSelectedSubjectId] = useState(null);
 
-  // If a specific subject is selected by user, compute its countdown
   const activeExam = selectedSubjectId
     ? exams.find((e) => e.id === selectedSubjectId) || nextExam
     : nextExam;
 
-  // Calculate countdown for the activeExam
+  // Calculate countdown for the selected exam
   const calculateSpecificCountdown = (exam) => {
     if (!exam) return { days: 0, hours: 0, minutes: 0, seconds: 0, passed: true };
     const examDateTime = new Date(`${exam.date}T10:30:00`);
@@ -39,195 +38,139 @@ export default function ExamCountdown({
       ? countdown
       : calculateSpecificCountdown(activeExam);
 
-  // Motivational countdown advice
-  const getMotivationalTip = (days) => {
-    if (days > 45) {
-      return "🌸 You have plenty of time! Build consistent study habits, master the concepts, and keep your notes tidy.";
-    } else if (days > 15) {
-      return "📚 Solid revision phase! Solve chapter-end NCERT questions, practice formulas daily, and review your mistakes.";
-    } else if (days > 3) {
-      return "⭐ Final sprint! Solve past CBSE sample papers under 3-hour exam conditions and stay well-rested.";
+  const getSubjectTip = (subj) => {
+    if (subj?.includes('Math')) {
+      return "📐 1st Board Exam: Practice 5 questions every morning. Write formulas clearly for full step marks!";
+    } else if (subj?.includes('Science')) {
+      return "🔬 Draw neat ray diagrams with scale & pencil. Don't forget arrowheads on rays!";
+    } else if (subj?.includes('Social')) {
+      return "🌍 Remember key dates and write in point-form with bold headings for 5-markers.";
+    } else if (subj?.includes('English')) {
+      return "📖 Mind the word limit in Analytical Paragraphs and keep formal letter layout crisp.";
+    } else if (subj?.includes('Tamil')) {
+      return "🌸 செய்யுள் மனப்பாடப் பகுதியை பிழையின்றி எழுதிப் பழகவும். நிறுத்தற்குறிகள் மிக முக்கியம்.";
     } else {
-      return "💖 You are ready, superstar! Trust your preparation, sleep peacefully, and walk into that hall with confidence!";
+      return "💻 Review DBMS SQL queries and Calc scenarios for quick scoring.";
     }
   };
 
   return (
-    <section id="countdown" className="py-12 sm:py-16 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="countdown" className="py-8 sm:py-12 relative px-3 sm:px-6">
+      <div className="max-w-4xl mx-auto space-y-6">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-100 text-pink-700 text-xs font-bold uppercase tracking-wider mb-2">
-            <Clock className="w-3.5 h-3.5" /> Real-Time Exam Countdown
+        <div className="text-center space-y-1.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-100 text-pink-700 text-xs font-bold uppercase tracking-wider">
+            <Clock className="w-3.5 h-3.5" /> Live Board Exam Countdown
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold font-cute text-slate-800">
-            Every Second Takes You Closer To Glory ✨
+          <h2 className="text-2xl sm:text-3xl font-extrabold font-cute text-slate-800">
+            Counting Down Every Second To Your Success ✨
           </h2>
-          <p className="text-sm text-slate-600 mt-2">
-            Track exact days, hours, minutes, and seconds until your CBSE board examinations.
+          <p className="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto">
+            Your exams in exact chronological order. Tap any subject below to see its timer!
           </p>
         </div>
 
-        {allCompleted ? (
-          // All Exams Completed Celebratory Card
-          <div className="max-w-2xl mx-auto bg-gradient-to-br from-pink-500 via-rose-500 to-pink-600 rounded-3xl p-8 sm:p-12 text-white text-center shadow-xl shadow-pink-300/50 space-y-5 animate-pulse-soft">
-            <div className="w-20 h-20 mx-auto rounded-3xl bg-white/20 backdrop-blur-md flex items-center justify-center text-4xl shadow-inner">
-              🎓
-            </div>
-            <h3 className="text-2xl sm:text-4xl font-extrabold font-cute">
-              🎉 Congratulations, Superstar!
-            </h3>
-            <p className="text-base sm:text-lg text-pink-100 leading-relaxed font-medium">
-              You have completed all your CBSE Class 10 Board Examinations! We are incredibly proud of your hard work, dedication, and heart.
-            </p>
-            <div className="pt-2">
+        {/* Subject Filter Pills: Order-wise (Maths first, Science, Social Science, English, Tamil, IT) */}
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+          {exams.map((ex, idx) => {
+            const isSelected = activeExam?.id === ex.id;
+            const shortName = ex.subject.split('(')[0].trim();
+            return (
               <button
+                key={ex.id}
                 onClick={() => {
-                  sound.playCelebration();
-                  triggerPinkConfetti();
+                  setSelectedSubjectId(ex.id);
+                  sound.playPop();
                 }}
-                className="px-6 py-3 rounded-2xl bg-white text-rose-600 font-bold hover:bg-rose-50 shadow-md transition-all inline-flex items-center gap-2"
-              >
-                <Sparkles className="w-5 h-5 text-pink-500" />
-                Celebrate Your Victory! 🌸
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="max-w-4xl mx-auto space-y-6">
-            {/* Subject Selector Pills */}
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              <button
-                onClick={() => setSelectedSubjectId(null)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  !selectedSubjectId || selectedSubjectId === nextExam?.id
-                    ? 'bg-pink-500 text-white shadow-md shadow-pink-200'
-                    : 'bg-white text-slate-600 hover:bg-pink-50 border border-pink-200'
+                className={`px-3 py-2 rounded-2xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-2xs ${
+                  isSelected
+                    ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-md shadow-pink-200'
+                    : 'bg-white text-slate-600 hover:bg-pink-50 border border-pink-200/80'
                 }`}
               >
-                ⚡ Next Upcoming: {nextExam?.subject}
+                <span>{idx === 0 ? '📐 1st' : idx === 1 ? '🔬 2nd' : idx === 2 ? '🌍 3rd' : idx === 3 ? '📖 4th' : idx === 4 ? '🌸 5th' : '💻 6th'}</span>
+                <span>{shortName}</span>
               </button>
-              {exams.map((ex) => (
-                <button
-                  key={ex.id}
-                  onClick={() => {
-                    setSelectedSubjectId(ex.id);
-                    sound.playPop();
-                  }}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
-                    selectedSubjectId === ex.id
-                      ? 'bg-rose-500 text-white shadow-md shadow-rose-200'
-                      : 'bg-white text-slate-600 hover:bg-pink-50 border border-pink-200'
-                  }`}
-                >
-                  {ex.subject.split('(')[0]}
-                </button>
-              ))}
+            );
+          })}
+        </div>
+
+        {/* Main Countdown Card */}
+        {activeExam && (
+          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-8 border-2 border-pink-200 shadow-xl shadow-pink-100/40 text-center space-y-5 relative">
+            {/* Subject Label */}
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-pink-700 text-xs font-bold">
+                <span>Code: {activeExam.code}</span>
+                <span>•</span>
+                <span>{activeExam.date} ({activeExam.day})</span>
+                <span>•</span>
+                <span>{activeExam.time}</span>
+              </div>
+
+              <h3 className="text-xl sm:text-3xl font-extrabold font-cute text-slate-800">
+                {activeExam.subject}
+              </h3>
             </div>
 
-            {/* Main Countdown Giant Card */}
-            {activeExam && (
-              <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 sm:p-10 border border-pink-200 shadow-xl shadow-pink-100/50 space-y-8 text-center relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-pink-400 via-rose-400 to-pink-500" />
-
-                {/* Exam Title & Details */}
-                <div className="space-y-2">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-50 text-pink-700 border border-pink-200 text-xs font-bold uppercase tracking-wider">
-                    <span>Subject Code: {activeExam.code}</span>
-                    <span>•</span>
-                    <span>{activeExam.category || 'Board Subject'}</span>
-                  </div>
-
-                  <h3 className="text-2xl sm:text-4xl font-extrabold font-cute text-slate-800">
-                    {activeExam.subject}
-                  </h3>
-
-                  <div className="flex flex-wrap items-center justify-center gap-4 text-xs sm:text-sm text-slate-500 font-medium">
-                    <span className="flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4 text-pink-500" />
-                      {activeExam.day}, {activeExam.date}
-                    </span>
-                    <span className="text-pink-300">•</span>
-                    <span className="flex items-center gap-1.5">
-                      <Clock className="w-4 h-4 text-pink-500" />
-                      {activeExam.time}
-                    </span>
-                    <span className="text-pink-300">•</span>
-                    <span className="px-2 py-0.5 rounded-md bg-pink-100 text-pink-700 text-xs font-bold">
-                      {activeExam.syllabusStatus}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Big 4-Digit Clock Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 max-w-2xl mx-auto">
-                  {/* Days */}
-                  <div className="bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-200/80 rounded-3xl p-4 sm:p-6 shadow-sm hover:scale-105 transition-transform">
-                    <span className="block text-4xl sm:text-6xl font-black font-cute text-pink-600">
-                      {String(currentCount.days).padStart(2, '0')}
-                    </span>
-                    <span className="block text-xs font-bold uppercase tracking-wider text-slate-500 mt-1">
-                      Days Remaining
-                    </span>
-                  </div>
-
-                  {/* Hours */}
-                  <div className="bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-200/80 rounded-3xl p-4 sm:p-6 shadow-sm hover:scale-105 transition-transform">
-                    <span className="block text-4xl sm:text-6xl font-black font-cute text-pink-600">
-                      {String(currentCount.hours).padStart(2, '0')}
-                    </span>
-                    <span className="block text-xs font-bold uppercase tracking-wider text-slate-500 mt-1">
-                      Hours
-                    </span>
-                  </div>
-
-                  {/* Minutes */}
-                  <div className="bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-200/80 rounded-3xl p-4 sm:p-6 shadow-sm hover:scale-105 transition-transform">
-                    <span className="block text-4xl sm:text-6xl font-black font-cute text-pink-600">
-                      {String(currentCount.minutes).padStart(2, '0')}
-                    </span>
-                    <span className="block text-xs font-bold uppercase tracking-wider text-slate-500 mt-1">
-                      Minutes
-                    </span>
-                  </div>
-
-                  {/* Seconds */}
-                  <div className="bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-200/80 rounded-3xl p-4 sm:p-6 shadow-sm hover:scale-105 transition-transform">
-                    <span className="block text-4xl sm:text-6xl font-black font-cute text-rose-500 animate-pulse">
-                      {String(currentCount.seconds).padStart(2, '0')}
-                    </span>
-                    <span className="block text-xs font-bold uppercase tracking-wider text-slate-500 mt-1">
-                      Seconds
-                    </span>
-                  </div>
-                </div>
-
-                {/* Motivational Advice Banner */}
-                <div className="p-4 rounded-2xl bg-pink-50/70 border border-pink-200/70 text-slate-700 text-xs sm:text-sm font-medium flex items-center justify-center gap-2">
-                  <Sparkles className="w-4 h-4 text-pink-500 shrink-0" />
-                  <span>{getMotivationalTip(currentCount.days)}</span>
-                </div>
-
-                {/* Notes & Quick Config Hint */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs text-slate-500 border-t border-pink-100">
-                  <div className="flex items-center gap-1.5 text-left">
-                    <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
-                    <span>Focus Note: {activeExam.notes}</span>
-                  </div>
-                  <button
-                    onClick={onOpenTimetableEdit}
-                    className="text-pink-600 font-bold hover:underline flex items-center gap-1"
-                  >
-                    <span>Update Dates Sheet</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+            {/* Countdown Grid (Large, thumb-friendly, gorgeous on Android) */}
+            <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-xl mx-auto">
+              <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-pink-200/80 shadow-2xs">
+                <span className="block text-3xl sm:text-5xl font-black font-cute text-pink-600">
+                  {String(currentCount.days).padStart(2, '0')}
+                </span>
+                <span className="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block mt-1">
+                  Days
+                </span>
               </div>
-            )}
+
+              <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-pink-200/80 shadow-2xs">
+                <span className="block text-3xl sm:text-5xl font-black font-cute text-pink-600">
+                  {String(currentCount.hours).padStart(2, '0')}
+                </span>
+                <span className="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block mt-1">
+                  Hours
+                </span>
+              </div>
+
+              <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-pink-200/80 shadow-2xs">
+                <span className="block text-3xl sm:text-5xl font-black font-cute text-pink-600">
+                  {String(currentCount.minutes).padStart(2, '0')}
+                </span>
+                <span className="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block mt-1">
+                  Mins
+                </span>
+              </div>
+
+              <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-pink-200/80 shadow-2xs">
+                <span className="block text-3xl sm:text-5xl font-black font-cute text-rose-500 animate-pulse">
+                  {String(currentCount.seconds).padStart(2, '0')}
+                </span>
+                <span className="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block mt-1">
+                  Secs
+                </span>
+              </div>
+            </div>
+
+            {/* Brother's Subject-Specific Tip */}
+            <div className="p-3.5 rounded-2xl bg-pink-50/70 border border-pink-200/70 text-xs sm:text-sm text-slate-700 font-medium max-w-xl mx-auto flex items-center justify-center gap-2">
+              <Sparkles className="w-4 h-4 text-pink-500 shrink-0" />
+              <span>{getSubjectTip(activeExam.subject)}</span>
+            </div>
+
+            {/* Footer link to timetable */}
+            <div className="pt-2 flex items-center justify-center gap-2 text-xs text-slate-500">
+              <span>Need to change dates from your school circular?</span>
+              <button
+                onClick={onOpenTimetableEdit}
+                className="text-pink-600 font-bold hover:underline"
+              >
+                Update Dates ✏️
+              </button>
+            </div>
           </div>
         )}
       </div>
     </section>
   );
 }
-

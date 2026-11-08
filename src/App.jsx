@@ -30,9 +30,9 @@ export default function App() {
     loadFromStorage('hsj_config', DEFAULT_CONFIG)
   );
 
-  // 2. Examination Timetable (Contains Tamil replacing Hindi)
+  // 2. Examination Timetable (Starts with Mathematics as 1st exam, Tamil in place of Hindi)
   const [exams, setExams] = useState(() =>
-    loadFromStorage('hsj_exams', DEFAULT_EXAMS)
+    loadFromStorage('hsj_exams_v3', DEFAULT_EXAMS)
   );
 
   // 3. Daily Study Tasks
@@ -60,7 +60,7 @@ export default function App() {
   }, [config]);
 
   useEffect(() => {
-    saveToStorage('hsj_exams', exams);
+    saveToStorage('hsj_exams_v3', exams);
   }, [exams]);
 
   useEffect(() => {
@@ -199,7 +199,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-rose-50/30 text-slate-700 selection:bg-pink-200 selection:text-pink-900 relative">
+    <div className="min-h-screen bg-rose-50/30 text-slate-700 selection:bg-pink-200 selection:text-pink-900 relative pb-16 md:pb-0">
       {/* Top Navbar */}
       <Navbar
         config={config}

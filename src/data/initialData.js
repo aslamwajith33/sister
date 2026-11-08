@@ -8,49 +8,35 @@ export const DEFAULT_CONFIG = {
   hugsSent: 12,
   studyStreak: 5,
   lastStudyDate: new Date().toISOString().split('T')[0],
+  boardTarget: "95%+"
 };
 
-// CBSE Class 10 Exam Timetable (with Tamil in place of Hindi as requested)
+// CBSE Class 10 Exam Timetable in exact order requested:
+// First Exam: Mathematics (not Tamil), followed by Science, Social Science, English, Tamil (replacing Hindi), and IT.
 export const DEFAULT_EXAMS = [
   {
-    id: "tamil-006",
-    subject: "Tamil (Language & Literature)",
-    code: "006",
-    date: "2027-02-18",
-    day: "Thursday",
+    id: "maths-041",
+    subject: "Mathematics (Standard / Basic)",
+    code: "041 / 241",
+    date: "2027-02-17",
+    day: "Wednesday",
     time: "10:30 AM – 01:30 PM",
     durationHours: 3,
     room: "Exam Hall A",
     status: "Upcoming",
-    syllabusStatus: "Well Revised", // "Not Started" | "In Progress" | "Well Revised" | "Exam Ready! ✨"
-    category: "Language",
-    color: "from-pink-400 to-rose-400",
-    badgeBg: "bg-pink-100 text-pink-700 border-pink-200",
-    notes: "Review செய்யுள் மனப்பாடப் பகுதி, இலக்கணம் (தொகைநிலை), and கடிதம் format.",
-    icon: "BookOpen"
-  },
-  {
-    id: "english-184",
-    subject: "English (Language & Literature)",
-    code: "184",
-    date: "2027-02-23",
-    day: "Tuesday",
-    time: "10:30 AM – 01:30 PM",
-    durationHours: 3,
-    room: "Exam Hall A",
-    status: "Upcoming",
-    syllabusStatus: "Exam Ready! ✨",
-    category: "Language",
-    color: "from-purple-400 to-indigo-400",
-    badgeBg: "bg-purple-100 text-purple-700 border-purple-200",
-    notes: "Revise Analytical Paragraph template, Formal Letter format, and First Flight character sketches.",
-    icon: "Feather"
+    syllabusStatus: "Well Revised",
+    category: "Core",
+    color: "from-blue-400 to-indigo-400",
+    badgeBg: "bg-blue-100 text-blue-700 border-blue-200",
+    notes: "Review Quadratic Formula, AP formulas, Trigonometric identities, Circle theorems, and Surface Area formulas.",
+    icon: "Calculator",
+    isFirstExam: true
   },
   {
     id: "science-086",
     subject: "Science",
     code: "086",
-    date: "2027-03-02",
+    date: "2027-02-23",
     day: "Tuesday",
     time: "10:30 AM – 01:30 PM",
     durationHours: 3,
@@ -60,14 +46,14 @@ export const DEFAULT_EXAMS = [
     category: "Core",
     color: "from-emerald-400 to-teal-400",
     badgeBg: "bg-emerald-100 text-emerald-700 border-emerald-200",
-    notes: "Practice Ray Diagrams (Mirror/Lens), Electricity formulas, Chemical reaction balancing, and Life Processes diagrams.",
+    notes: "Practice Ray Diagrams (Mirror/Lens), Electricity formulas, Chemical reaction balancing, and Biology diagrams.",
     icon: "FlaskConical"
   },
   {
     id: "sst-087",
     subject: "Social Science",
     code: "087",
-    date: "2027-03-08",
+    date: "2027-03-01",
     day: "Monday",
     time: "10:30 AM – 01:30 PM",
     durationHours: 3,
@@ -81,28 +67,45 @@ export const DEFAULT_EXAMS = [
     icon: "Globe"
   },
   {
-    id: "maths-041",
-    subject: "Mathematics (Standard / Basic)",
-    code: "041 / 241",
-    date: "2027-03-13",
+    id: "english-184",
+    subject: "English (Language & Literature)",
+    code: "184",
+    date: "2027-03-06",
     day: "Saturday",
     time: "10:30 AM – 01:30 PM",
     durationHours: 3,
     room: "Exam Hall A",
     status: "Upcoming",
+    syllabusStatus: "Exam Ready! ✨",
+    category: "Language",
+    color: "from-purple-400 to-indigo-400",
+    badgeBg: "bg-purple-100 text-purple-700 border-purple-200",
+    notes: "Revise Analytical Paragraph template, Formal Letter format, and First Flight character sketches.",
+    icon: "Feather"
+  },
+  {
+    id: "tamil-006",
+    subject: "Tamil (Language & Literature)",
+    code: "006",
+    date: "2027-03-11",
+    day: "Thursday",
+    time: "10:30 AM – 01:30 PM",
+    durationHours: 3,
+    room: "Exam Hall A",
+    status: "Upcoming",
     syllabusStatus: "Well Revised",
-    category: "Core",
-    color: "from-blue-400 to-cyan-400",
-    badgeBg: "bg-blue-100 text-blue-700 border-blue-200",
-    notes: "Quadratic formula, AP formulas, Trigonometric identities, Circle theorems, and Surface Area & Volumes formula sheet.",
-    icon: "Calculator"
+    category: "Language",
+    color: "from-pink-400 to-rose-400",
+    badgeBg: "bg-pink-100 text-pink-700 border-pink-200",
+    notes: "Review செய்யுள் மனப்பாடப் பகுதி, இலக்கணம் (தொகைநிலை), and கடிதம் format.",
+    icon: "BookOpen"
   },
   {
     id: "it-402",
     subject: "Information Technology",
     code: "402",
-    date: "2027-03-18",
-    day: "Thursday",
+    date: "2027-03-16",
+    day: "Tuesday",
     time: "10:30 AM – 12:30 PM",
     durationHours: 2,
     room: "Exam Hall B",
@@ -120,9 +123,9 @@ export const DEFAULT_EXAMS = [
 export const DEFAULT_TASKS = [
   {
     id: "task-1",
-    title: "Revise Trigonometric Identities & solve 5 NCERT exemplars",
+    title: "Revise Quadratic Formula & solve 5 NCERT exemplars",
     subject: "Mathematics",
-    chapter: "Introduction to Trigonometry",
+    chapter: "Quadratic Equations",
     priority: "High",
     estimatedMinutes: 45,
     isTarget: true,
@@ -131,9 +134,9 @@ export const DEFAULT_TASKS = [
   },
   {
     id: "task-2",
-    title: "Draw and label Human Heart & Nephron diagrams with neat pencil lines",
+    title: "Practice Light reflection & refraction ray diagrams with scale",
     subject: "Science",
-    chapter: "Life Processes (Biology)",
+    chapter: "Light (Physics)",
     priority: "High",
     estimatedMinutes: 35,
     isTarget: true,
@@ -164,7 +167,7 @@ export const DEFAULT_TASKS = [
   },
   {
     id: "task-5",
-    title: "Practice 1 Analytical Paragraph based on a pie-chart data",
+    title: "Practice 1 Analytical Paragraph based on a chart",
     subject: "English",
     chapter: "Writing Skills",
     priority: "Low",
@@ -295,18 +298,6 @@ export const CBSE_CHAPTERS = {
     { id: "sst-15", name: "Money and Credit", important: "Formal vs Informal credit sources, Self Help Groups (SHGs)", completed: true },
     { id: "sst-16", name: "Globalisation and the Indian Economy", important: "MNCs role, Factors enabling globalisation, Fair globalisation", completed: false }
   ],
-  "Tamil": [
-    { id: "tam-1", name: "இயல் 1: அன்னை மொழியே & தமிழ்ச் சொல்வளம்", important: "மனப்பாடப் பாடல்: அன்னை மொழியே, தாவரங்களின் இலை, கொழுந்து பெயர்கள்", completed: true },
-    { id: "tam-2", name: "இயல் 2: காற்றே வா & முல்லைப்பாட்டு", important: "பாரதியார் கவிதை நயம், முல்லை நிலக் காட்சிகள், விரிச்சி கேட்டல்", completed: true },
-    { id: "tam-3", name: "இயல் 3: விருந்து போற்றுதும் & காசிக்காண்டம்", important: "விருந்தோம்பல் மரபு, அதிவீரராம பாண்டியர் காசிக்காண்ட நற்பண்புகள்", completed: false },
-    { id: "tam-4", name: "இயல் 4: செயற்கை நுண்ணறிவு & பெருமாள் திருமொழி", important: "AI பயன்கள், குலசேகர ஆழ்வார் பக்திப்பாடல்", completed: false },
-    { id: "tam-5", name: "இயல் 5: மணற்கேணி & நீதி வெண்பா", important: "மொழிபெயர்ப்புக் கலை, செய்குதம்பி பாவலர் சதாவதானம்", completed: true },
-    { id: "tam-6", name: "இயல் 6: நிகழ்கலை & பூத்தொடுத்தல்", important: "கரகாட்டம், மயிலாட்டம், உமா மகேஸ்வரி கவிதை வரிகள்", completed: false },
-    { id: "tam-7", name: "இயல் 7: விதைநெல் & மெய்க்கீர்த்தி", important: "சிற்றகல் ஒளி (ம.பொ.சி.), இரண்டாம் ராசராச சோழன் மெய்க்கீர்த்தி", completed: false },
-    { id: "tam-8", name: "இயல் 8: அறம் & ஞானம்", important: "காலக்கணிதம் (கண்ணதாசன்), ஞானம் (தி.சோ. வேணுகோபாலன்)", completed: false },
-    { id: "tam-9", name: "இயல் 9: மனிதநேயம் & தேம்பாவணி", important: "வீரமாமுனிவர் வளன் சரிதம், ஜெயகாந்தன் நினைவு", completed: false },
-    { id: "tam-10", name: "இலக்கணம்: தொகைநிலை & தொகாநிலைத் தொடர்கள்", important: "வேற்றுமைத் தொகை, வினைத்தொகை, பண்புத்தொகை, விளித்தொடர், வல்லினம் மிகும் இடங்கள்", completed: true }
-  ],
   "English": [
     { id: "eng-1", name: "A Letter to God & Dust of Snow / Fire and Ice", important: "Lencho's faith vs irony, Robert Frost symbolism", completed: true },
     { id: "eng-2", name: "Nelson Mandela: Long Walk to Freedom & A Tiger in the Zoo", important: "Apartheid struggles, Courage definition, Contrast between zoo & wild tiger", completed: true },
@@ -318,6 +309,18 @@ export const CBSE_CHAPTERS = {
     { id: "eng-8", name: "The Sermon at Benares & The Proposal (Play)", important: "Kisa Gotami and mustard seed lesson, Chubukov & Lomov quarrel humor", completed: false },
     { id: "eng-9", name: "Footprints without Feet (Supp. Reader)", important: "Triumph of Surgery, Thief's Story, Midnight Visitor, Necklace, Bholi", completed: true },
     { id: "eng-10", name: "Writing Skills: Formal Letter & Analytical Paragraph", important: "Format, clarity, comparative vocabulary, word count 100-120 words", completed: true }
+  ],
+  "Tamil": [
+    { id: "tam-1", name: "இயல் 1: அன்னை மொழியே & தமிழ்ச் சொல்வளம்", important: "மனப்பாடப் பாடல்: அன்னை மொழியே, தாவரங்களின் இலை, கொழுந்து பெயர்கள்", completed: true },
+    { id: "tam-2", name: "இயல் 2: காற்றே வா & முல்லைப்பாட்டு", important: "பாரதியார் கவிதை நயம், முல்லை நிலக் காட்சிகள், விரிச்சி கேட்டல்", completed: true },
+    { id: "tam-3", name: "இயல் 3: விருந்து போற்றுதும் & காசிக்காண்டம்", important: "விருந்தோம்பல் மரபு, அதிவீரராம பாண்டியர் காசிக்காண்ட நற்பண்புகள்", completed: false },
+    { id: "tam-4", name: "இயல் 4: செயற்கை நுண்ணறிவு & பெருமாள் திருமொழி", important: "AI பயன்கள், குலசேகர ஆழ்வார் பக்திப்பாடல்", completed: false },
+    { id: "tam-5", name: "இயல் 5: மணற்கேணி & நீதி வெண்பா", important: "மொழிபெயர்ப்புக் கலை, செய்குதம்பி பாவலர் சதாவதானம்", completed: true },
+    { id: "tam-6", name: "இயல் 6: நிகழ்கலை & பூத்தொடுத்தல்", important: "கரகாட்டம், மயிலாட்டம், உமா மகேஸ்வரி கவிதை வரிகள்", completed: false },
+    { id: "tam-7", name: "இயல் 7: விதைநெல் & மெய்க்கீர்த்தி", important: "சிற்றகல் ஒளி (ம.பொ.சி.), இரண்டாம் ராசராச சோழன் மெய்க்கீர்த்தி", completed: false },
+    { id: "tam-8", name: "இயல் 8: அறம் & ஞானம்", important: "காலக்கணிதம் (கண்ணதாசன்), ஞானம் (தி.சோ. வேணுகோபாலன்)", completed: false },
+    { id: "tam-9", name: "இயல் 9: மனிதநேயம் & தேம்பாவணி", important: "வீரமாமுனிவர் வளன் சரிதம், ஜெயகாந்தன் நினைவு", completed: false },
+    { id: "tam-10", name: "இலக்கணம்: தொகைநிலை & தொகாநிலைத் தொடர்கள்", important: "வேற்றுமைத் தொகை, வினைத்தொகை, பண்புத்தொகை, விளித்தொடர், வல்லினம் மிகும் இடங்கள்", completed: true }
   ],
   "Information Technology": [
     { id: "it-1", name: "Part A: Employability Skills", important: "Self-management, ICT basics, Entrepreneurship, Green economy", completed: true },
@@ -469,6 +472,22 @@ export const SUBJECT_REVISION_GUIDES = {
       "In Economics, clearly distinguish between Per Capita Income vs HDI and Formal vs Informal credit."
     ]
   },
+  "English": {
+    badge: "Subject Code: 184",
+    tagline: "Format Precision, Reading Speed & Analytical Eloquence",
+    color: "from-purple-500 to-indigo-600",
+    bgSoft: "bg-purple-50/70 border-purple-200",
+    keyFormulas: [
+      { name: "Formal Letter Format", formula: "Sender's Address → Date → Receiver's Designation/Address → Subject → Salutation → Body (3 paras) → Complimentary Close", note: "Keep subject concise (within 6-8 words). Salutation: 'Sir/Madam'." },
+      { name: "Analytical Paragraph", formula: "Introductory Sentence + Overview/Trend + Comparison (Highest/Lowest) + Conclusion", note: "Use transition words: 'In contrast to', 'Strikingly', 'Whereas', 'Steadily increased'." }
+    ],
+    strategyTips: [
+      "Utilize the 15-minute reading time specifically to read Unseen Comprehension passages and mark keywords.",
+      "Keep within the word limits! CBSE penalizes overly lengthy essays that waste precious exam time.",
+      "In Literature, quote key character traits and underlying themes (e.g. faith vs superstition in Letter to God, bravery in Nelson Mandela).",
+      "Check grammar for subject-verb agreement and tense consistency before handing in."
+    ]
+  },
   "Tamil": {
     badge: "Subject Code: 006",
     tagline: "இலக்கண நுணுக்கங்கள், செய்யுள் நயம் & கட்டுரை கட்டமைப்பு",
@@ -484,22 +503,6 @@ export const SUBJECT_REVISION_GUIDES = {
       "செய்யுள் வினாக்களில் திரண்ட கருத்து, நயம் பாராட்டல் (மோனை, எதுகை, இயைபு) ஆகியவற்றைத் தனித்தனித் தலைப்புகளில் எழுதவும்.",
       "கட்டுரை எழுதும் போது முன்னுரை, உட்தலைப்புகள் (குறைந்தது 4), மற்றும் முடிவுரை எனத் தெளிவாக அமைத்து பழமொழிகளை மேற்கோள் காட்டவும்.",
       "கையெழுத்து மிகத் தெளிவாகவும், சொற்களுக்கிடையே சீரான இடைவெளியுடனும் இருக்க வேண்டும்."
-    ]
-  },
-  "English": {
-    badge: "Subject Code: 184",
-    tagline: "Format Precision, Reading Speed & Analytical Eloquence",
-    color: "from-purple-500 to-indigo-600",
-    bgSoft: "bg-purple-50/70 border-purple-200",
-    keyFormulas: [
-      { name: "Formal Letter Format", formula: "Sender's Address → Date → Receiver's Designation/Address → Subject → Salutation → Body (3 paras) → Complimentary Close", note: "Keep subject concise (within 6-8 words). Salutation: 'Sir/Madam'." },
-      { name: "Analytical Paragraph", formula: "Introductory Sentence + Overview/Trend + Comparison (Highest/Lowest) + Conclusion", note: "Use transition words: 'In contrast to', 'Strikingly', 'Whereas', 'Steadily increased'." }
-    ],
-    strategyTips: [
-      "Utilize the 15-minute reading time specifically to read Unseen Comprehension passages and mark keywords.",
-      "Keep within the word limits! CBSE penalizes overly lengthy essays that waste precious exam time.",
-      "In Literature, quote key character traits and underlying themes (e.g. faith vs superstition in Letter to God, bravery in Nelson Mandela).",
-      "Check grammar for subject-verb agreement and tense consistency before handing in."
     ]
   },
   "Information Technology": {
@@ -552,4 +555,3 @@ export const GENERAL_EXAM_STRATEGIES = [
     ]
   }
 ];
-
