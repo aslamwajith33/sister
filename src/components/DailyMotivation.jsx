@@ -3,25 +3,37 @@ import {
   Heart,
   Sparkles,
   Shuffle,
-  Smile,
-  ShieldCheck,
+  Sun,
   Wind,
   Plus,
   Send,
   Star,
   Quote
 } from 'lucide-react';
-import { MOTIVATIONAL_QUOTES, DAILY_AFFIRMATIONS } from '../data/initialData';
+import { MOTIVATIONAL_QUOTES } from '../data/initialData';
 import { sound } from '../utils/sound';
 import { triggerPinkConfetti } from '../utils/confetti';
 
-export default function DailyMotivation({ sisterName = 'Superstar' }) {
-  // Quote of the day logic: pick by day of the year
-  const dayOfYear = Math.floor(
-    (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24
-  );
-  const initialIndex = dayOfYear % MOTIVATIONAL_QUOTES.length;
-  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(initialIndex);
+export default function DailyMotivation({ sisterName = 'Afra Shahnaas' }) {
+  // Morning motivation logic: updates automatically every morning based on today's date!
+  const today = new Date();
+  const todayDateStr = today.toISOString().split('T')[0];
+  const dateFormatted = today.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  // Unique hash per calendar day so every morning at 12:00 AM it switches to a fresh quote!
+  const dateHash = todayDateStr.split('-').reduce((acc, part) => acc * 31 + parseInt(part, 10), 0);
+  const morningIndex = Math.abs(dateHash) % MOTIVATIONAL_QUOTES.length;
+
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(morningIndex);
+
+  // Sync index if date changes
+  useEffect(() => {
+    setCurrentQuoteIndex(morningIndex);
+  }, [morningIndex]);
 
   // Deep breathing interactive tool
   const [isBreathing, setIsBreathing] = useState(false);
@@ -35,9 +47,10 @@ export default function DailyMotivation({ sisterName = 'Superstar' }) {
       return saved
         ? JSON.parse(saved)
         : [
-            'Mastered the mirror and lens sign convention!',
+            'Mastered the mirror and lens sign convention in Science!',
+            'Solved 10 Trigonometry identities with zero mistakes in Maths!',
             'Memorized all 6 types of தொகைநிலைத் தொடர்கள் in Tamil.',
-            'Wrote a flawless Analytical Paragraph without looking at notes!'
+            'Wrote a high-scoring Analytical Paragraph in English!'
           ];
     } catch {
       return ['Mastered the mirror and lens sign convention!'];
@@ -45,7 +58,7 @@ export default function DailyMotivation({ sisterName = 'Superstar' }) {
   });
   const [newWin, setNewWin] = useState('');
 
-  // Shuffle quote
+  // Shuffle quote manually if user wants more
   const handleShuffleQuote = () => {
     let nextIndex;
     do {
@@ -115,74 +128,70 @@ export default function DailyMotivation({ sisterName = 'Superstar' }) {
   const currentQuote = MOTIVATIONAL_QUOTES[currentQuoteIndex];
 
   return (
-    <section id="motivation" className="py-12 sm:py-16 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="motivation" className="py-10 sm:py-14 relative px-3 sm:px-6">
+      <div className="max-w-4xl mx-auto space-y-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-100 text-pink-700 text-xs font-bold uppercase tracking-wider mb-2">
-            <Heart className="w-3.5 h-3.5 fill-pink-500 text-pink-500" /> Daily Motivation Corner
+        <div className="text-center space-y-1.5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-100 text-pink-700 text-xs font-bold uppercase tracking-wider">
+            <Sun className="w-3.5 h-3.5 text-amber-500" /> Daily Morning Motivation
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold font-cute text-slate-800">
-            Inspiring Words For Your Journey 🌸
+          <h2 className="text-2xl sm:text-3xl font-extrabold font-cute text-slate-800">
+            Inspiring Words For {sisterName} 🌸
           </h2>
-          <p className="text-sm text-slate-600 mt-2">
-            Gentle reminders to reduce exam stress, protect your peace, and fuel your inner fire.
+          <p className="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto">
+            A brand new motivation quote automatically arrives each morning to start your day with power and peace!
           </p>
         </div>
 
         {/* Hero Motivational Quote Card */}
-        <div className="max-w-4xl mx-auto bg-gradient-to-br from-pink-500 via-rose-500 to-pink-600 rounded-3xl p-8 sm:p-12 text-white shadow-xl shadow-pink-200/60 relative overflow-hidden mb-12">
-          {/* Decorative quotes background watermark */}
-          <div className="absolute top-4 left-6 text-white/10 text-9xl font-serif select-none pointer-events-none">
-            “
-          </div>
-          <div className="absolute bottom-4 right-8 text-white/10 text-8xl font-serif select-none pointer-events-none">
-            ”
-          </div>
-
-          <div className="relative z-10 text-center space-y-6">
+        <div className="bg-gradient-to-br from-pink-500 via-rose-500 to-pink-600 rounded-3xl p-6 sm:p-10 text-white shadow-xl shadow-pink-200/60 relative overflow-hidden">
+          <div className="relative z-10 text-center space-y-5">
+            {/* Morning Tag */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-pink-50 text-xs font-bold uppercase tracking-wider">
-              <span>{currentQuote.icon}</span> Quote of the Day • {currentQuote.tag}
+              <Sun className="w-3.5 h-3.5 text-amber-300" />
+              <span>Today's Morning Inspiration • {dateFormatted}</span>
             </div>
 
-            <h3 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold font-cute tracking-tight leading-snug max-w-3xl mx-auto text-pink-50 drop-shadow-xs">
+            {/* The Quote */}
+            <h3 className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-cute tracking-tight leading-snug max-w-2xl mx-auto text-pink-50">
               "{currentQuote.quote}"
             </h3>
 
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <span className="text-sm sm:text-base font-semibold text-pink-100 flex items-center gap-2">
-                <Heart className="w-4 h-4 fill-white text-white" />
-                With love, {currentQuote.author}
+            {/* Controls */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <span className="text-xs sm:text-sm font-semibold text-pink-100 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <span>Theme: {currentQuote.tag}</span>
               </span>
               <button
                 onClick={handleShuffleQuote}
                 className="px-4 py-2 rounded-xl bg-white/25 hover:bg-white text-white hover:text-rose-600 text-xs font-bold backdrop-blur-md transition-all flex items-center gap-1.5 shadow-xs"
               >
                 <Shuffle className="w-3.5 h-3.5" />
-                <span>Shuffle New Quote</span>
+                <span>Shuffle Another Quote</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* 2-Column Section: Calming Breath Zone & Small Wins Jar */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-5xl mx-auto">
+        {/* 2-Column: Calming 1-Minute Breath & Confidence Wins Jar */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Calming Breath Circle (4-7-8 Breathing Technique) */}
-          <div className="lg:col-span-6 bg-white/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-pink-100 shadow-md flex flex-col items-center text-center justify-between space-y-6">
+          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 border-2 border-pink-200 shadow-sm flex flex-col items-center text-center justify-between space-y-5">
             <div className="space-y-1">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
-                <Wind className="w-3.5 h-3.5" /> Instant Stress-Reliever
+                <Wind className="w-3.5 h-3.5" /> Instant Exam Calm
               </div>
-              <h4 className="text-xl font-bold font-cute text-slate-800">
+              <h4 className="text-lg font-bold font-cute text-slate-800">
                 1-Minute Calming Breath 🧘‍♀️
               </h4>
               <p className="text-xs text-slate-500 max-w-xs mx-auto">
-                Whenever you feel anxious about board exam revisions, follow the gentle circle to calm your nervous system.
+                Before starting study or when feeling nervous, follow the gentle circle to calm your mind.
               </p>
             </div>
 
             {/* Interactive Breathing Circle */}
-            <div className="relative w-44 h-44 flex items-center justify-center">
+            <div className="relative w-36 h-36 flex items-center justify-center">
               <div
                 className={`absolute inset-0 rounded-full transition-all duration-1000 ${
                   isBreathing
@@ -194,20 +203,20 @@ export default function DailyMotivation({ sisterName = 'Superstar' }) {
                     : 'bg-pink-100/60 scale-100'
                 }`}
               />
-              <div className="relative z-10 w-32 h-32 rounded-full bg-gradient-to-tr from-pink-400 to-rose-400 text-white flex flex-col items-center justify-center shadow-md">
+              <div className="relative z-10 w-28 h-28 rounded-full bg-gradient-to-tr from-pink-400 to-rose-400 text-white flex flex-col items-center justify-center shadow-md">
                 {isBreathing ? (
                   <>
-                    <span className="text-xs font-bold uppercase tracking-wider text-pink-100">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-pink-100">
                       {breathPhase}
                     </span>
-                    <span className="text-3xl font-black font-cute mt-0.5">
+                    <span className="text-2xl font-black font-cute mt-0.5">
                       {countdownNum}s
                     </span>
                   </>
                 ) : (
                   <>
-                    <span className="text-2xl">🌸</span>
-                    <span className="text-xs font-bold mt-1">Ready</span>
+                    <span className="text-xl">🌸</span>
+                    <span className="text-xs font-bold mt-0.5">Breathe</span>
                   </>
                 )}
               </div>
@@ -215,68 +224,67 @@ export default function DailyMotivation({ sisterName = 'Superstar' }) {
 
             <button
               onClick={toggleBreathing}
-              className={`px-5 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all shadow-sm ${
+              className={`w-full py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all shadow-sm ${
                 isBreathing
                   ? 'bg-rose-100 text-rose-700 hover:bg-rose-200'
                   : 'bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:from-pink-600 hover:to-rose-600'
               }`}
             >
-              {isBreathing ? 'Stop Calming Breath' : 'Start 4-7-8 Breathing Guide'}
+              {isBreathing ? 'Stop Calming Breath' : 'Start 4-7-8 Breathing'}
             </button>
           </div>
 
-          {/* Sister's Confidence & Small Wins Jar */}
-          <div className="lg:col-span-6 bg-white/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-pink-100 shadow-md flex flex-col justify-between space-y-5">
+          {/* Afra's Confidence & Small Wins Jar */}
+          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 border-2 border-pink-200 shadow-sm flex flex-col justify-between space-y-4">
             <div>
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-1">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-bold border border-amber-200">
-                  <Star className="w-3.5 h-3.5 fill-amber-500" /> Confidence Jar
+                  <Star className="w-3.5 h-3.5 fill-amber-500" /> Afra's Wins
                 </div>
                 <span className="text-xs font-semibold text-slate-400">
-                  {smallWins.length} Small Wins
+                  {smallWins.length} Saved Wins
                 </span>
               </div>
-              <h4 className="text-xl font-bold font-cute text-slate-800">
-                {sisterName}'s Victory Jar 🍯
+              <h4 className="text-lg font-bold font-cute text-slate-800">
+                Confidence Jar 🍯
               </h4>
-              <p className="text-xs text-slate-500 mt-1">
-                Record every little victory. Small progress every single day turns into top board results!
+              <p className="text-xs text-slate-500">
+                Log every little chapter and formula you conquered today!
               </p>
 
-              {/* Input for adding new win */}
-              <form onSubmit={handleAddWin} className="mt-4 flex gap-2">
+              {/* Form */}
+              <form onSubmit={handleAddWin} className="mt-3 flex gap-2">
                 <input
                   type="text"
                   value={newWin}
                   onChange={(e) => setNewWin(e.target.value)}
-                  placeholder="e.g. Solved 10 math questions with zero errors!"
-                  className="flex-1 px-3.5 py-2 text-xs sm:text-sm bg-pink-50/40 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                  placeholder="e.g. Mastered Quadratic Equations formula!"
+                  className="flex-1 px-3 py-2 text-xs bg-pink-50/50 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400"
                 />
                 <button
                   type="submit"
-                  className="px-3.5 py-2 rounded-xl bg-pink-500 hover:bg-pink-600 text-white transition-colors shrink-0"
-                  title="Add small win"
+                  className="px-3.5 py-2 rounded-xl bg-pink-500 hover:bg-pink-600 text-white text-xs font-bold transition-colors shrink-0"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-3.5 h-3.5" />
                 </button>
               </form>
             </div>
 
-            {/* List of small wins */}
-            <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+            {/* Wins list */}
+            <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
               {smallWins.map((win, idx) => (
                 <div
                   key={idx}
-                  className="p-3 rounded-2xl bg-pink-50/50 border border-pink-100 text-xs text-slate-700 flex items-start gap-2.5"
+                  className="p-2.5 rounded-xl bg-pink-50/50 border border-pink-100 text-xs text-slate-700 flex items-start gap-2"
                 >
-                  <span className="text-pink-500 text-sm shrink-0">✨</span>
+                  <span className="text-pink-500 text-xs shrink-0">✨</span>
                   <span className="font-medium">{win}</span>
                 </div>
               ))}
             </div>
 
             <div className="text-[11px] text-pink-600 font-semibold text-center italic">
-              "You don't need to be perfect. Just give your best." ❤️
+              "Small progress every day leads to big achievements." 🌸
             </div>
           </div>
         </div>
@@ -284,4 +292,3 @@ export default function DailyMotivation({ sisterName = 'Superstar' }) {
     </section>
   );
 }
-

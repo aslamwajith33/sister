@@ -20,7 +20,7 @@ export default function DailyPlanner({
   onAddTask,
   onToggleTask,
   onDeleteTask,
-  sisterName = 'Superstar'
+  sisterName = 'Afra Shahnaas'
 }) {
   const [taskTitle, setTaskTitle] = useState('');
   const [subject, setSubject] = useState('Mathematics');

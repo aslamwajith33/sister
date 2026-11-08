@@ -77,7 +77,7 @@ export default function HomeHero({
             {/* Header Titles */}
             <div className="space-y-1.5 pr-20 sm:pr-0">
               <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold font-cute text-slate-800 tracking-tight leading-tight">
-                Hey, <span className="text-pink-600 underline decoration-pink-300 decoration-wavy decoration-2">Superstar!</span> ✨
+                Hey, <span className="text-pink-600 underline decoration-pink-300 decoration-wavy decoration-2">{config.sisterName || 'Afra Shahnaas'}!</span> ✨
               </h1>
               <p className="text-xs sm:text-base text-slate-600 font-medium leading-relaxed">
                 Welcome to your success journey. Every small step takes you closer to your dreams!

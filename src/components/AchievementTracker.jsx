@@ -19,7 +19,7 @@ export default function AchievementTracker({
   totalChaptersCount,
   tasksCompletedCount,
   streak,
-  sisterName = 'Superstar'
+  sisterName = 'Afra Shahnaas'
 }) {
   const overallPercentage =
     totalChaptersCount > 0

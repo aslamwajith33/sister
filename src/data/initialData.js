@@ -178,11 +178,11 @@ export const DEFAULT_TASKS = [
   }
 ];
 
-// Motivational Quotes (includes required exact quotes + sisterly affirmations)
+// Motivational Quotes (includes required exact quotes + personal affirmations)
 export const MOTIVATIONAL_QUOTES = [
   {
     quote: "Believe in yourself. You are capable of amazing things!",
-    author: "Your Loving Brother",
+    author: "Confidence Boost",
     tag: "Confidence",
     icon: "✨"
   },
@@ -194,7 +194,7 @@ export const MOTIVATIONAL_QUOTES = [
   },
   {
     quote: "Don't compare your journey with anyone else's.",
-    author: "Brotherly Wisdom",
+    author: "Mindset Reminder",
     tag: "Mindset",
     icon: "🌸"
   },
@@ -229,9 +229,9 @@ export const MOTIVATIONAL_QUOTES = [
     icon: "⭐"
   },
   {
-    quote: "No exam question can be harder than your determination, sister!",
-    author: "Bhaiya's Pep Talk",
-    tag: "Brother's Cheer",
+    quote: "No exam question can be harder than your determination, Afra!",
+    author: "Inner Strength",
+    tag: "Cheer",
     icon: "🔥"
   }
 ];
@@ -244,7 +244,7 @@ export const DAILY_AFFIRMATIONS = [
   "My brain is sharp, my heart is at peace, and I give my best.",
   "Mistakes are just stepping stones to understanding.",
   "I am proud of how far I have come, and excited for what I can achieve!",
-  "My brother and family believe in me, and I believe in myself too!"
+  "My family believes in me, and I believe in myself too!"
 ];
 
 // Complete CBSE Class 10 Chapter Syllabus Checklist

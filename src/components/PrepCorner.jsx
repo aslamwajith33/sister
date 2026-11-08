@@ -26,7 +26,7 @@ import { triggerPinkConfetti } from '../utils/confetti';
 export default function PrepCorner({
   chapterProgress,
   onToggleChapter,
-  sisterName = 'Superstar'
+  sisterName = 'Afra Shahnaas'
 }) {
   const [activeSubject, setActiveSubject] = useState('Mathematics');
   const [activeSubTab, setActiveSubTab] = useState('checklist'); // 'checklist' | 'formulas' | 'strategies'
@@ -298,7 +298,7 @@ export default function PrepCorner({
                 </div>
 
                 <div className="pt-2 text-[11px] text-pink-600 font-semibold border-t border-pink-50">
-                  Brother's Secret: Stay calm and write step-by-step! ✨
+                  Golden Secret: Stay calm and write step-by-step! ✨
                 </div>
               </div>
             ))}
