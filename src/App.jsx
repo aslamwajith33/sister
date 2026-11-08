@@ -6,7 +6,6 @@ import ExamTimetable from './components/ExamTimetable';
 import DailyPlanner from './components/DailyPlanner';
 import DailyMotivation from './components/DailyMotivation';
 import PrepCorner from './components/PrepCorner';
-import AchievementTracker from './components/AchievementTracker';
 import StudyWellness from './components/StudyWellness';
 import Footer from './components/Footer';
 import EditSisterModal from './components/EditSisterModal';
@@ -215,8 +214,6 @@ export default function App() {
           nextExam={nextExam}
           countdown={countdown}
           tasks={tasks}
-          chaptersCompletedCount={chaptersCompletedCount}
-          totalChaptersCount={totalChaptersCount}
           streak={config.studyStreak}
         />
 
@@ -254,12 +251,7 @@ export default function App() {
           sisterName={config.sisterName}
         />
 
-        {/* 7. Achievement Tracker (Manual checkoff & custom milestones) */}
-        <AchievementTracker
-          sisterName={config.sisterName}
-        />
-
-        {/* 8. Study Break and Wellness (Pomodoro Timer & Healthy Habits) */}
+        {/* 7. Study Break and Wellness (Pomodoro Timer & Healthy Habits) */}
         <StudyWellness
           onSessionComplete={handlePomodoroComplete}
           pomodoroSessionsCount={pomodoroCount}

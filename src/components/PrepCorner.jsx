@@ -120,7 +120,7 @@ export default function PrepCorner({
             <div className="bg-pink-50/70 border border-pink-200 px-4 py-2.5 rounded-2xl flex items-center gap-3">
               <div>
                 <div className="text-xs font-bold text-slate-600">
-                  Syllabus Mastered: {completedCount}/{totalCount} Chapters
+                  Chapters Revised: {completedCount}/{totalCount} Chapters
                 </div>
                 <div className="w-32 bg-pink-200/60 h-2 rounded-full mt-1.5 overflow-hidden">
                   <div

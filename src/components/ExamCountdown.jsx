@@ -113,42 +113,48 @@ export default function ExamCountdown({
               </h3>
             </div>
 
-            {/* Countdown Grid (Large, thumb-friendly, gorgeous on Android) */}
-            <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-xl mx-auto">
-              <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-pink-200/80 shadow-2xs">
-                <span className="block text-3xl sm:text-5xl font-black font-cute text-pink-600">
-                  {String(currentCount.days).padStart(2, '0')}
+            {/* Small Running Timer Above */}
+            <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 sm:p-3 rounded-2xl bg-pink-50 border border-pink-200 text-slate-700 shadow-2xs max-w-xl mx-auto">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-pink-700">
+                <Clock className="w-3.5 h-3.5 text-pink-600" />
+                <span>Live Countdown:</span>
+              </div>
+              <div className="flex items-center gap-1 font-mono text-xs sm:text-sm font-black text-slate-800">
+                <span className="px-2 py-0.5 rounded-lg bg-white border border-pink-200 text-pink-800">
+                  {String(currentCount.days).padStart(2, '0')} Days
                 </span>
-                <span className="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block mt-1">
-                  Days
+                <span className="text-pink-400">:</span>
+                <span className="px-2 py-0.5 rounded-lg bg-white border border-pink-200 text-pink-800">
+                  {String(currentCount.hours).padStart(2, '0')}h
+                </span>
+                <span className="text-pink-400">:</span>
+                <span className="px-2 py-0.5 rounded-lg bg-white border border-pink-200 text-pink-800">
+                  {String(currentCount.minutes).padStart(2, '0')}m
+                </span>
+                <span className="text-pink-400">:</span>
+                <span className="px-2 py-0.5 rounded-lg bg-rose-500 text-white animate-pulse">
+                  {String(currentCount.seconds).padStart(2, '0')}s
                 </span>
               </div>
+            </div>
 
-              <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-pink-200/80 shadow-2xs">
-                <span className="block text-3xl sm:text-5xl font-black font-cute text-pink-600">
-                  {String(currentCount.hours).padStart(2, '0')}
-                </span>
-                <span className="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block mt-1">
-                  Hours
-                </span>
+            {/* Calendar Card Page */}
+            <div className="bg-white rounded-2xl border-2 border-pink-200 shadow-md overflow-hidden max-w-sm mx-auto">
+              <div className="bg-gradient-to-r from-pink-500 to-rose-500 text-white py-2 px-4 flex items-center justify-between text-xs font-bold">
+                <span>{activeExam.date.split('-')[0]}</span>
+                <span className="uppercase">{activeExam.day}</span>
+                <span>{activeExam.time.split('–')[0]}</span>
               </div>
-
-              <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-pink-200/80 shadow-2xs">
-                <span className="block text-3xl sm:text-5xl font-black font-cute text-pink-600">
-                  {String(currentCount.minutes).padStart(2, '0')}
-                </span>
-                <span className="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block mt-1">
-                  Mins
-                </span>
-              </div>
-
-              <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-pink-200/80 shadow-2xs">
-                <span className="block text-3xl sm:text-5xl font-black font-cute text-rose-500 animate-pulse">
-                  {String(currentCount.seconds).padStart(2, '0')}
-                </span>
-                <span className="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block mt-1">
-                  Secs
-                </span>
+              <div className="p-4 text-center space-y-1">
+                <div className="text-4xl sm:text-5xl font-black font-cute text-slate-800">
+                  {new Date(activeExam.date).getDate()}
+                </div>
+                <div className="text-xs font-bold text-pink-600 uppercase tracking-widest">
+                  {new Date(activeExam.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                </div>
+                <div className="text-xs text-slate-500 font-semibold pt-1">
+                  ⏳ {currentCount.days} Days Remaining Until {activeExam.subject.split('(')[0].trim()}
+                </div>
               </div>
             </div>
 

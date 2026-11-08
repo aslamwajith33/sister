@@ -6,7 +6,6 @@ import {
   Clock,
   CheckSquare,
   BookOpen,
-  Award,
   Volume2,
   VolumeX,
   Menu,
@@ -45,7 +44,6 @@ export default function Navbar({ config, onOpenEditSister, streak = 5 }) {
     { label: 'Daily Planner', href: '#planner', icon: CheckSquare },
     { label: 'Motivation', href: '#motivation', icon: Heart },
     { label: 'CBSE Prep', href: '#prep', icon: BookOpen },
-    { label: 'Achievements', href: '#achievements', icon: Award },
     { label: 'Focus & Wellness', href: '#wellness', icon: Timer },
   ];
 

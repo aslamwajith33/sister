@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Sparkles,
   Heart,
@@ -6,22 +6,21 @@ import {
   CheckCircle,
   Clock,
   Edit2,
-  ArrowRight,
-  Flame,
+  Check,
   Star,
-  BookOpen
+  Award,
+  Flame
 } from 'lucide-react';
 import { sound } from '../utils/sound';
+import { triggerPinkConfetti } from '../utils/confetti';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 
 export default function HomeHero({
   config,
   onOpenEditSister,
   nextExam,
   countdown,
-  tasks,
-  chaptersCompletedCount,
-  totalChaptersCount,
-  streak
+  tasks
 }) {
   const today = new Date();
   const dateFormatted = today.toLocaleDateString('en-US', {
@@ -37,6 +36,58 @@ export default function HomeHero({
   // Target task calculations
   const todayTargets = tasks.filter((t) => t.isTarget);
   const completedTargets = todayTargets.filter((t) => t.completed).length;
+
+  // Track crossed-off days ("after everyday crash/cross everything")
+  const todayKey = today.toISOString().split('T')[0];
+  const [crossedDays, setCrossedDays] = useState(() =>
+    loadFromStorage('hsj_crossed_days_v2', {
+      [todayKey]: false,
+      count: 1
+    })
+  );
+
+  useEffect(() => {
+    saveToStorage('hsj_crossed_days_v2', crossedDays);
+  }, [crossedDays]);
+
+  const isTodayCrossed = Boolean(crossedDays[todayKey]);
+
+  const handleToggleTodayCross = () => {
+    if (!isTodayCrossed) {
+      sound.playSuccessChime();
+      triggerPinkConfetti();
+      setCrossedDays((prev) => ({
+        ...prev,
+        [todayKey]: true,
+        count: (prev.count || 0) + 1
+      }));
+    } else {
+      sound.playPop();
+      setCrossedDays((prev) => ({
+        ...prev,
+        [todayKey]: false,
+        count: Math.max(0, (prev.count || 1) - 1)
+      }));
+    }
+  };
+
+  // Generate a 7-day rolling window for the calendar page cross-off view
+  const recentDays = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - 3 + i);
+    const key = d.toISOString().split('T')[0];
+    const isPast = key < todayKey;
+    const isCurrent = key === todayKey;
+    const isCrossed = isPast || (isCurrent && isTodayCrossed);
+    return {
+      date: d,
+      key,
+      dayNum: d.getDate(),
+      dayName: d.toLocaleDateString('en-US', { weekday: 'narrow' }),
+      isCurrent,
+      isCrossed
+    };
+  });
 
   return (
     <section id="home" className="pt-20 sm:pt-24 pb-8 sm:pb-12 relative overflow-hidden px-3 sm:px-6">
@@ -58,7 +109,7 @@ export default function HomeHero({
               sound.playPop();
               onOpenEditSister();
             }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-pink-100/80 hover:bg-pink-200/80 text-pink-800 text-xs font-bold transition-all shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-pink-100/80 hover:bg-pink-200/80 text-pink-800 text-xs font-bold transition-all shadow-2xs cursor-pointer"
           >
             <Edit2 className="w-3 h-3 text-pink-600" />
             <span>Edit Name ({config.sisterName})</span>
@@ -66,7 +117,7 @@ export default function HomeHero({
         </div>
 
         {/* Main Handmade Card with Love */}
-        <div className="bg-white/90 backdrop-blur-md rounded-3xl p-5 sm:p-8 border-2 border-pink-200 shadow-xl shadow-pink-100/50 relative overflow-hidden">
+        <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-8 border-2 border-pink-200 shadow-xl shadow-pink-100/50 relative overflow-hidden">
           {/* Cute Sticker in corner */}
           <div className="absolute top-3 right-4 sm:top-5 sm:right-6 flex items-center gap-1 px-3 py-1 bg-amber-50 border border-amber-200 rounded-full text-[11px] font-bold text-amber-700 shadow-2xs">
             <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
@@ -90,66 +141,168 @@ export default function HomeHero({
               <div className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                 <span className="font-bold text-pink-700">Daily Affirmation: </span>
                 <span className="italic font-medium">
-                  "Believe in yourself, Afra! Every chapter you conquer brings you one step closer to your dream score. You've got this!" ✨
+                  "Believe in yourself, Afra! Every day you study brings you one step closer to your dream score. You've got this!" ✨
                 </span>
               </div>
             </div>
 
-            {/* FIRST EXAM COUNTDOWN HERO: MATHEMATICS */}
-            <div className="p-4 sm:p-6 rounded-3xl bg-gradient-to-br from-pink-500 via-rose-500 to-pink-600 text-white shadow-lg shadow-pink-300/50 relative overflow-hidden">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+            {/* FIRST EXAM COUNTDOWN HERO: CALENDAR PAGE WITH SMALL RUNNING TIMER ABOVE */}
+            <div className="rounded-3xl border-2 border-pink-300/80 bg-gradient-to-b from-rose-50/60 to-white shadow-lg shadow-pink-100/50 p-4 sm:p-6 space-y-4">
+
+              {/* 1. Timer Running in Above in Small */}
+              <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 sm:p-3 rounded-2xl bg-white border border-pink-200 shadow-2xs">
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-white/20 text-white text-[11px] font-bold uppercase tracking-wider backdrop-blur-xs">
-                    📐 1st Board Exam
-                  </span>
-                  <span className="text-xs font-semibold text-pink-100">
-                    Maths (Code: 041/241)
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-xs font-bold text-pink-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-pink-600" />
+                    Maths Live Timer:
                   </span>
                 </div>
-                <div className="text-xs text-pink-100 flex items-center gap-1 font-medium">
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>Wed, Feb 17, 2027 • 10:30 AM</span>
-                </div>
-              </div>
 
-              {/* 4 Big Rounded Countdown Boxes */}
-              <div className="grid grid-cols-4 gap-2 sm:gap-4 my-2">
-                <div className="bg-white/20 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 text-center border border-white/25 shadow-inner">
-                  <span className="block text-2xl sm:text-4xl font-black font-cute text-white">
-                    {String(countdown.days).padStart(2, '0')}
+                {/* Running in Small */}
+                <div className="flex items-center gap-1.5 font-mono text-xs sm:text-sm font-black text-slate-800">
+                  <span className="px-2 py-0.5 rounded-lg bg-pink-100 text-pink-800">
+                    {String(countdown.days).padStart(2, '0')} Days
                   </span>
-                  <span className="text-[10px] sm:text-xs text-pink-100 uppercase font-bold tracking-wider">
-                    Days
+                  <span className="text-pink-300 font-bold">:</span>
+                  <span className="px-2 py-0.5 rounded-lg bg-pink-100 text-pink-800">
+                    {String(countdown.hours).padStart(2, '0')}h
                   </span>
-                </div>
-                <div className="bg-white/20 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 text-center border border-white/25 shadow-inner">
-                  <span className="block text-2xl sm:text-4xl font-black font-cute text-white">
-                    {String(countdown.hours).padStart(2, '0')}
+                  <span className="text-pink-300 font-bold">:</span>
+                  <span className="px-2 py-0.5 rounded-lg bg-pink-100 text-pink-800">
+                    {String(countdown.minutes).padStart(2, '0')}m
                   </span>
-                  <span className="text-[10px] sm:text-xs text-pink-100 uppercase font-bold tracking-wider">
-                    Hours
-                  </span>
-                </div>
-                <div className="bg-white/20 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 text-center border border-white/25 shadow-inner">
-                  <span className="block text-2xl sm:text-4xl font-black font-cute text-white">
-                    {String(countdown.minutes).padStart(2, '0')}
-                  </span>
-                  <span className="text-[10px] sm:text-xs text-pink-100 uppercase font-bold tracking-wider">
-                    Mins
-                  </span>
-                </div>
-                <div className="bg-white/20 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 text-center border border-white/25 shadow-inner">
-                  <span className="block text-2xl sm:text-4xl font-black font-cute text-amber-200 animate-pulse">
-                    {String(countdown.seconds).padStart(2, '0')}
-                  </span>
-                  <span className="text-[10px] sm:text-xs text-pink-100 uppercase font-bold tracking-wider">
-                    Secs
+                  <span className="text-pink-300 font-bold">:</span>
+                  <span className="px-2 py-0.5 rounded-lg bg-rose-500 text-white animate-pulse">
+                    {String(countdown.seconds).padStart(2, '0')}s
                   </span>
                 </div>
               </div>
 
-              <div className="text-[11px] sm:text-xs text-pink-100 font-medium text-center mt-2">
-                ✨ Mathematics is your first paper! Review key formulas and solve step-by-step.
+              {/* 2. Calendar Type Page */}
+              <div className="bg-white rounded-2xl border-2 border-rose-300 shadow-md overflow-hidden max-w-lg mx-auto">
+                {/* Spiral binder rings at top */}
+                <div className="bg-slate-100 py-1.5 px-4 flex justify-around border-b border-slate-200">
+                  {[1, 2, 3, 4, 5, 6].map((ring) => (
+                    <div key={ring} className="flex flex-col items-center">
+                      <div className="w-3 h-3 rounded-full bg-slate-300 border border-slate-400 shadow-inner" />
+                      <div className="w-1 h-2 bg-slate-400 rounded-full -mt-0.5" />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Crimson Calendar Header Bar */}
+                <div className="bg-gradient-to-r from-rose-500 via-pink-600 to-rose-500 text-white py-2.5 px-4 flex items-center justify-between text-xs sm:text-sm font-bold tracking-wider">
+                  <span className="flex items-center gap-1">🌸 CBSE 10th</span>
+                  <span className="font-extrabold uppercase">FEBRUARY 2027</span>
+                  <span className="text-amber-200 font-extrabold">WEDNESDAY</span>
+                </div>
+
+                {/* Calendar Body Page */}
+                <div className="p-5 sm:p-6 text-center space-y-3 bg-gradient-to-b from-white via-rose-50/20 to-white">
+                  <div className="text-xs font-bold uppercase tracking-widest text-rose-500">
+                    First Board Examination
+                  </div>
+
+                  {/* Big Calendar Date Number */}
+                  <div className="relative inline-block">
+                    <span className="text-6xl sm:text-7xl font-black font-cute text-slate-800 tracking-tight block">
+                      17
+                    </span>
+                    <span className="text-xs font-bold text-slate-500 block uppercase tracking-widest -mt-1">
+                      February 2027
+                    </span>
+                  </div>
+
+                  {/* Subject Title */}
+                  <div className="p-2.5 rounded-xl bg-pink-50 border border-pink-200/80 max-w-sm mx-auto">
+                    <div className="text-sm font-extrabold text-pink-700 flex items-center justify-center gap-1.5">
+                      <span>📐</span>
+                      <span>Mathematics (Standard / Basic)</span>
+                    </div>
+                    <div className="text-[11px] text-slate-600 font-medium mt-0.5">
+                      Subject Code: 041 / 241 • 10:30 AM – 01:30 PM (3 Hours)
+                    </div>
+                  </div>
+
+                  {/* 3. Daily Cross-Off / Crash Tracker ("after everyday crash everything") */}
+                  <div className="pt-3 border-t border-pink-100 space-y-3">
+                    <div className="flex items-center justify-between text-xs font-bold text-slate-700">
+                      <span className="flex items-center gap-1">
+                        <span>📅</span>
+                        <span>Daily Study Cross-Off Tracker:</span>
+                      </span>
+                      <span className="text-pink-600">
+                        {crossedDays.count || 1} Days Conquered ❌
+                      </span>
+                    </div>
+
+                    {/* Rolling Week Days (Past days crossed out / crashed) */}
+                    <div className="grid grid-cols-7 gap-1.5 text-center">
+                      {recentDays.map((d) => (
+                        <div
+                          key={d.key}
+                          className={`p-1.5 rounded-xl border transition-all text-xs ${
+                            d.isCurrent
+                              ? 'bg-pink-100 border-pink-400 font-bold ring-2 ring-pink-300'
+                              : d.isCrossed
+                              ? 'bg-rose-50/60 border-rose-200 text-slate-400'
+                              : 'bg-white border-slate-200 text-slate-600'
+                          }`}
+                        >
+                          <div className="text-[10px] text-slate-400 uppercase font-semibold">
+                            {d.dayName}
+                          </div>
+                          <div
+                            className={`text-sm font-black relative inline-block ${
+                              d.isCrossed
+                                ? 'line-through decoration-rose-500 decoration-2 text-rose-400'
+                                : 'text-slate-700'
+                            }`}
+                          >
+                            {d.dayNum}
+                          </div>
+                          <div className="text-[9px] mt-0.5">
+                            {d.isCrossed ? (
+                              <span className="text-rose-500 font-bold">❌</span>
+                            ) : d.isCurrent ? (
+                              <span className="text-pink-600 font-bold">Today</span>
+                            ) : (
+                              <span>⏳</span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Interactive "Cross Off Today" Action Button */}
+                    <div className="pt-1">
+                      <button
+                        onClick={handleToggleTodayCross}
+                        className={`w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer ${
+                          isTodayCrossed
+                            ? 'bg-emerald-50 text-emerald-700 border-2 border-emerald-300'
+                            : 'bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white shadow-md shadow-pink-200'
+                        }`}
+                      >
+                        {isTodayCrossed ? (
+                          <>
+                            <Check className="w-4 h-4 text-emerald-600" />
+                            <span>Today's Study Conquered & Crossed Off! ❌ (Tap to undo)</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>✏️</span>
+                            <span>Cross Off Today's Study Day ({dateFormatted})</span>
+                          </>
+                        )}
+                      </button>
+                      <p className="text-[11px] text-slate-400 mt-1">
+                        Every day crossed off brings you one day closer to board exam glory! 🌸
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -168,7 +321,7 @@ export default function HomeHero({
                 className="py-3 px-4 rounded-2xl bg-white hover:bg-pink-50 text-slate-700 font-bold text-xs sm:text-sm border border-pink-200 flex items-center justify-center gap-2 transition-all active:scale-95 shadow-2xs"
               >
                 <Calendar className="w-4 h-4 text-pink-500" />
-                <span>Exam Timetable (Order-wise)</span>
+                <span>100-Day Plan & Timetable</span>
               </a>
 
               <a
@@ -179,32 +332,6 @@ export default function HomeHero({
                 <span>Focus Timer & Wellness ⏱️</span>
               </a>
             </div>
-          </div>
-        </div>
-
-        {/* Clean, Simple Progress Bar (No Clumsy Clutter) */}
-        <div className="bg-white/80 rounded-2xl p-4 border border-pink-200/80 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <div className="w-9 h-9 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center font-bold text-sm shrink-0">
-              📚
-            </div>
-            <div>
-              <span className="text-xs font-bold text-slate-800 block">
-                Syllabus Mastered: {chaptersCompletedCount} of {totalChaptersCount} Chapters
-              </span>
-              <span className="text-[11px] text-pink-600 font-medium">
-                {Math.round((chaptersCompletedCount / (totalChaptersCount || 1)) * 100)}% of Class 10 Syllabus Revised
-              </span>
-            </div>
-          </div>
-
-          <div className="w-full sm:w-48 bg-pink-100 h-2.5 rounded-full overflow-hidden">
-            <div
-              className="bg-gradient-to-r from-pink-500 to-rose-500 h-full rounded-full transition-all duration-500"
-              style={{
-                width: `${Math.round((chaptersCompletedCount / (totalChaptersCount || 1)) * 100)}%`
-              }}
-            />
           </div>
         </div>
       </div>
