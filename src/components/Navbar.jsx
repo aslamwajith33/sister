@@ -46,7 +46,7 @@ export default function Navbar({ config, onOpenEditSister, streak = 5 }) {
     { label: 'Motivation', href: '#motivation', icon: Heart },
     { label: 'CBSE Prep', href: '#prep', icon: BookOpen },
     { label: 'Achievements', href: '#achievements', icon: Award },
-    { label: "Brother's Note", href: '#brother', icon: Heart, highlight: true },
+    { label: 'Focus & Wellness', href: '#wellness', icon: Timer },
   ];
 
   const handleLinkClick = () => {
@@ -221,12 +221,12 @@ export default function Navbar({ config, onOpenEditSister, streak = 5 }) {
         </a>
 
         <a
-          href="#brother"
+          href="#wellness"
           onClick={() => sound.playPop()}
-          className="flex flex-col items-center py-1 px-2 rounded-xl text-rose-600 active:scale-95 transition-all"
+          className="flex flex-col items-center py-1 px-2 rounded-xl text-slate-600 hover:text-pink-600 active:scale-95 transition-all"
         >
-          <span className="text-lg animate-pulse">❤️</span>
-          <span className="text-[10px] font-bold text-rose-700 mt-0.5">Bhaiya</span>
+          <span className="text-lg">⏱️</span>
+          <span className="text-[10px] font-bold mt-0.5">Timer</span>
         </a>
       </nav>
     </>

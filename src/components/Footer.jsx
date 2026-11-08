@@ -36,7 +36,7 @@ export default function Footer({ config }) {
             <a href="#planner" className="hover:text-pink-600 transition-colors">Planner</a>
             <a href="#motivation" className="hover:text-pink-600 transition-colors">Motivation</a>
             <a href="#prep" className="hover:text-pink-600 transition-colors">CBSE Prep</a>
-            <a href="#brother" className="hover:text-pink-600 transition-colors text-rose-600">Brother's Message ❤️</a>
+            <a href="#wellness" className="hover:text-pink-600 transition-colors text-pink-600">Focus & Wellness ⏱️</a>
           </div>
 
           {/* Back to top button */}

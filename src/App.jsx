@@ -7,7 +7,6 @@ import DailyPlanner from './components/DailyPlanner';
 import DailyMotivation from './components/DailyMotivation';
 import PrepCorner from './components/PrepCorner';
 import AchievementTracker from './components/AchievementTracker';
-import BrothersMessage from './components/BrothersMessage';
 import StudyWellness from './components/StudyWellness';
 import Footer from './components/Footer';
 import EditSisterModal from './components/EditSisterModal';
@@ -27,7 +26,7 @@ import { sound } from './utils/sound';
 export default function App() {
   // 1. Core Config (Sister's Name, Brother's Name, Streak, Hugs)
   const [config, setConfig] = useState(() =>
-    loadFromStorage('hsj_config', DEFAULT_CONFIG)
+    loadFromStorage('hsj_config_v2', DEFAULT_CONFIG)
   );
 
   // 2. Examination Timetable (Starts with Mathematics as 1st exam, Tamil in place of Hindi)
@@ -56,7 +55,7 @@ export default function App() {
 
   // Synchronize to localStorage
   useEffect(() => {
-    saveToStorage('hsj_config', config);
+    saveToStorage('hsj_config_v2', config);
   }, [config]);
 
   useEffect(() => {
@@ -265,14 +264,7 @@ export default function App() {
           sisterName={config.sisterName}
         />
 
-        {/* 8. Special Brother's Message */}
-        <BrothersMessage
-          config={config}
-          onSendHug={handleSendHug}
-          hugsCount={config.hugsSent}
-        />
-
-        {/* 9. Study Break and Wellness (Pomodoro Timer & Healthy Habits) */}
+        {/* 8. Study Break and Wellness (Pomodoro Timer & Healthy Habits) */}
         <StudyWellness
           onSessionComplete={handlePomodoroComplete}
           pomodoroSessionsCount={pomodoroCount}

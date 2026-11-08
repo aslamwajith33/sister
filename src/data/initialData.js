@@ -1,7 +1,7 @@
 // Initial data for Her Success Journey 🌸
 
 export const DEFAULT_CONFIG = {
-  sisterName: "Ananya",
+  sisterName: "Afra Shahnaas",
   brotherName: "Bhaiya",
   tagline: "Little Steps. Big Dreams. Beautiful Success. ❤️",
   boardExamYear: "CBSE Class 10 Board Examination",

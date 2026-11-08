@@ -84,13 +84,13 @@ export default function HomeHero({
               </p>
             </div>
 
-            {/* Brother's Handmade Note */}
+            {/* Daily Affirmation Note */}
             <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-pink-50 via-rose-50/70 to-pink-50 border border-pink-200/80 flex items-start gap-3">
-              <span className="text-xl sm:text-2xl shrink-0 mt-0.5">💌</span>
+              <span className="text-xl sm:text-2xl shrink-0 mt-0.5">🌸</span>
               <div className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                <span className="font-bold text-rose-700">From Bhaiya: </span>
+                <span className="font-bold text-pink-700">Daily Affirmation: </span>
                 <span className="italic font-medium">
-                  "No need to worry about the whole syllabus today. Just conquer one chapter, stay calm, and remember I believe in you forever!" ❤️
+                  "Believe in yourself, Afra! Every chapter you conquer brings you one step closer to your dream score. You've got this!" ✨
                 </span>
               </div>
             </div>
@@ -172,11 +172,11 @@ export default function HomeHero({
               </a>
 
               <a
-                href="#brother"
+                href="#wellness"
                 className="py-3 px-4 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs sm:text-sm border border-rose-200 flex items-center justify-center gap-2 transition-all active:scale-95"
               >
-                <Heart className="w-4 h-4 fill-rose-500 text-rose-500 animate-pulse" />
-                <span>Brother's Message ❤️</span>
+                <Clock className="w-4 h-4 text-rose-500" />
+                <span>Focus Timer & Wellness ⏱️</span>
               </a>
             </div>
           </div>
