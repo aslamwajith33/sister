@@ -2,10 +2,21 @@
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Her Success Journey 🌸 | CBSE Class 10 Companion</title>
-    <meta name="description" content="A personal CBSE Class 10 Exam Companion website created with love by a brother for his sister. Little Steps. Big Dreams. Beautiful Success. ❤️" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+    <!-- PWA Web App Manifest & Theme -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#f43f5e" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Afra's Journey 🌸" />
+
+    <title>Her Success Journey 🌸 | Afra Shahnaas</title>
+    <meta name="description" content="A personal CBSE Class 10 Exam Companion website and app created with love for Afra Shahnaas. Little Steps. Big Dreams. Beautiful Success. ❤️" />
+
     <!-- Google Fonts: Quicksand & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,5 +25,20 @@
   <body class="bg-rose-50/40 text-slate-700 font-sans antialiased selection:bg-pink-200 selection:text-pink-900 min-h-screen">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((reg) => {
+              console.log('🌸 PWA Service Worker registered successfully:', reg.scope);
+            })
+            .catch((err) => {
+              console.warn('PWA Service Worker registration failed:', err);
+            });
+        });
+      }
+    </script>
   </body>
 </html>

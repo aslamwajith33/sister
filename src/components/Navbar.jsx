@@ -12,11 +12,19 @@ import {
   X,
   Flame,
   Timer,
-  Edit3
+  Edit3,
+  Download,
+  Smartphone
 } from 'lucide-react';
 import { sound } from '../utils/sound';
 
-export default function Navbar({ config, onOpenEditSister, streak = 5 }) {
+export default function Navbar({
+  config,
+  onOpenEditSister,
+  onOpenInstall,
+  isInstalled = false,
+  streak = 5
+}) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(sound.isMuted());
@@ -108,6 +116,23 @@ export default function Navbar({ config, onOpenEditSister, streak = 5 }) {
 
           {/* Right Action Badges */}
           <div className="flex items-center gap-2">
+            {/* Install PWA App Button */}
+            {!isInstalled && (
+              <button
+                onClick={() => {
+                  sound.playPop();
+                  onOpenInstall();
+                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 hover:from-pink-600 hover:to-rose-600 text-white font-black text-xs shadow-md shadow-pink-200 transition-all active:scale-95 animate-pulse cursor-pointer"
+                title="Install this as an app on your phone"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Install App</span>
+                <span className="sm:hidden">Install</span>
+                <span>📲</span>
+              </button>
+            )}
+
             {/* Sister Name Pill */}
             <button
               onClick={onOpenEditSister}
@@ -176,6 +201,23 @@ export default function Navbar({ config, onOpenEditSister, streak = 5 }) {
                 );
               })}
             </div>
+
+            {/* Install Button in Mobile Menu */}
+            {!isInstalled && (
+              <div className="pt-2">
+                <button
+                  onClick={() => {
+                    sound.playPop();
+                    setMobileMenuOpen(false);
+                    onOpenInstall();
+                  }}
+                  className="w-full py-2.5 px-4 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md shadow-pink-200 cursor-pointer"
+                >
+                  <Smartphone className="w-4 h-4 animate-bounce" />
+                  <span>Install Afra's App on Phone 📲</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
       </header>

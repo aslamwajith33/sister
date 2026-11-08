@@ -9,7 +9,9 @@ import {
   Check,
   Star,
   Award,
-  Flame
+  Flame,
+  Download,
+  Smartphone
 } from 'lucide-react';
 import { sound } from '../utils/sound';
 import { triggerPinkConfetti } from '../utils/confetti';
@@ -18,6 +20,8 @@ import { loadFromStorage, saveToStorage } from '../utils/storage';
 export default function HomeHero({
   config,
   onOpenEditSister,
+  onOpenInstall,
+  isInstalled = false,
   nextExam,
   countdown,
   tasks
@@ -145,6 +149,37 @@ export default function HomeHero({
                 </span>
               </div>
             </div>
+
+            {/* PWA One-Click Install Banner */}
+            {!isInstalled && (
+              <div className="p-3 sm:p-3.5 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-rose-500 text-white shadow-md shadow-pink-200 flex items-center justify-between gap-3 animate-fade-in">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <span className="text-2xl sm:text-3xl shrink-0 animate-bounce">📲</span>
+                  <div className="min-w-0">
+                    <div className="text-xs sm:text-sm font-extrabold flex items-center gap-1.5 flex-wrap">
+                      <span>Download as an App on Your Phone!</span>
+                      <span className="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px] font-black uppercase">
+                        App
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-pink-100 truncate">
+                      Tap once to install directly to home screen for fast fullscreen access!
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => {
+                    sound.playPop();
+                    onOpenInstall();
+                  }}
+                  className="py-2 px-3.5 sm:px-4 rounded-xl bg-white hover:bg-pink-50 text-pink-700 font-black text-xs shadow-sm transition-all active:scale-95 shrink-0 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5 text-pink-600" />
+                  <span>Install App ✨</span>
+                </button>
+              </div>
+            )}
 
             {/* FIRST EXAM COUNTDOWN HERO: CALENDAR PAGE WITH SMALL RUNNING TIMER ABOVE */}
             <div className="rounded-3xl border-2 border-pink-300/80 bg-gradient-to-b from-rose-50/60 to-white shadow-lg shadow-pink-100/50 p-4 sm:p-6 space-y-4">

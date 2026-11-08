@@ -10,6 +10,7 @@ import StudyWellness from './components/StudyWellness';
 import Footer from './components/Footer';
 import EditSisterModal from './components/EditSisterModal';
 import EditTimetableModal from './components/EditTimetableModal';
+import InstallModal from './components/InstallModal';
 
 import {
   DEFAULT_CONFIG,
@@ -51,6 +52,37 @@ export default function App() {
   // Modals state
   const [isEditSisterOpen, setIsEditSisterOpen] = useState(false);
   const [isEditTimetableOpen, setIsEditTimetableOpen] = useState(false);
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+
+  // PWA Install Prompt Listener
+  useEffect(() => {
+    const handleBeforeInstall = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    const handleAppInstalled = () => {
+      setIsInstalled(true);
+      setDeferredPrompt(null);
+      setIsInstallModalOpen(false);
+      triggerPinkConfetti();
+      sound.playSuccessChime();
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+      setIsInstalled(true);
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
 
   // Synchronize to localStorage
   useEffect(() => {
@@ -202,6 +234,8 @@ export default function App() {
       <Navbar
         config={config}
         onOpenEditSister={() => setIsEditSisterOpen(true)}
+        onOpenInstall={() => setIsInstallModalOpen(true)}
+        isInstalled={isInstalled}
         streak={config.studyStreak}
       />
 
@@ -211,6 +245,8 @@ export default function App() {
         <HomeHero
           config={config}
           onOpenEditSister={() => setIsEditSisterOpen(true)}
+          onOpenInstall={() => setIsInstallModalOpen(true)}
+          isInstalled={isInstalled}
           nextExam={nextExam}
           countdown={countdown}
           tasks={tasks}
@@ -274,6 +310,17 @@ export default function App() {
         onClose={() => setIsEditTimetableOpen(false)}
         exams={exams}
         onSave={(newExams) => setExams(newExams)}
+      />
+
+      <InstallModal
+        isOpen={isInstallModalOpen}
+        onClose={() => setIsInstallModalOpen(false)}
+        deferredPrompt={deferredPrompt}
+        onInstallSuccess={() => {
+          setIsInstalled(true);
+          triggerPinkConfetti();
+        }}
+        sisterName={config.sisterName}
       />
     </div>
   );
