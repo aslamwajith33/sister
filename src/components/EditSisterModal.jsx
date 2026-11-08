@@ -4,11 +4,11 @@ import { sound } from '../utils/sound';
 import { triggerPinkConfetti } from '../utils/confetti';
 
 export default function EditSisterModal({ isOpen, onClose, config, onSave }) {
-  if (!isOpen) return null;
+  const [sisterName, setSisterName] = useState(config?.sisterName || 'Afra Shahnaas');
+  const [brotherName, setBrotherName] = useState(config?.brotherName || 'Bhaiya');
+  const [boardTarget, setBoardTarget] = useState(config?.boardTarget || '95%+');
 
-  const [sisterName, setSisterName] = useState(config.sisterName || 'Afra Shahnaas');
-  const [brotherName, setBrotherName] = useState(config.brotherName || 'Bhaiya');
-  const [boardTarget, setBoardTarget] = useState(config.boardTarget || '95%+');
+  if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();

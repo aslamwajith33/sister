@@ -4,9 +4,7 @@ import { DEFAULT_EXAMS } from '../data/initialData';
 import { sound } from '../utils/sound';
 
 export default function EditTimetableModal({ isOpen, onClose, exams, onSave }) {
-  if (!isOpen) return null;
-
-  const [examList, setExamList] = useState(JSON.parse(JSON.stringify(exams)));
+  const [examList, setExamList] = useState(() => exams ? JSON.parse(JSON.stringify(exams)) : []);
   const [activeTab, setActiveTab] = useState('list'); // 'list' | 'add'
 
   // New exam form state
@@ -17,6 +15,8 @@ export default function EditTimetableModal({ isOpen, onClose, exams, onSave }) {
   const [newTime, setNewTime] = useState('10:30 AM – 01:30 PM');
   const [newNotes, setNewNotes] = useState('');
   const [newStatus, setNewStatus] = useState('Not Started');
+
+  if (!isOpen) return null;
 
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
