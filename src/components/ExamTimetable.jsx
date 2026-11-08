@@ -5,16 +5,58 @@ import {
   BookOpen,
   Edit,
   Sparkles,
-  CheckCircle,
-  FileText,
-  AlertCircle,
-  Plus,
-  Share2
+  Printer,
+  CheckSquare,
+  Check,
+  ShieldCheck,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { sound } from '../utils/sound';
 
 export default function ExamTimetable({ exams, onOpenEdit }) {
   const [filterCategory, setFilterCategory] = useState('All');
+  const [showChecklist, setShowChecklist] = useState(false);
+
+  // Hall ticket bag checklist state
+  const [hallChecklist, setHallChecklist] = useState(() => {
+    try {
+      const saved = localStorage.getItem('hsj_hall_checklist');
+      return saved
+        ? JSON.parse(saved)
+        : [
+            { id: 'item-1', label: 'CBSE Official Admit Card (Signed by School Principal & Parent)', checked: true },
+            { id: 'item-2', label: 'School Identity Card (ID Card)', checked: true },
+            { id: 'item-3', label: 'Transparent Stationery Pouch (No opaque pouches allowed)', checked: true },
+            { id: 'item-4', label: '2 Blue / Royal Blue Ballpoint Pens (Tested & smooth)', checked: true },
+            { id: 'item-5', label: 'Pencils (HB), Sharpener, Eraser & Transparent Ruler (for diagrams & margins)', checked: false },
+            { id: 'item-6', label: 'Analog Wristwatch (Smartwatches are strictly prohibited in the exam hall)', checked: false },
+            { id: 'item-7', label: 'Clear Transparent Water Bottle (No labels)', checked: true },
+            { id: 'item-8', label: 'School Uniform & Comfortable Shoes (CBSE exam hall protocol)', checked: true }
+          ];
+    } catch {
+      return [];
+    }
+  });
+
+  const toggleChecklistItem = (id) => {
+    const updated = hallChecklist.map((item) =>
+      item.id === id ? { ...item, checked: !item.checked } : item
+    );
+    setHallChecklist(updated);
+    try {
+      localStorage.setItem('hsj_hall_checklist', JSON.stringify(updated));
+    } catch (e) {
+      console.warn(e);
+    }
+    sound.playSuccessChime();
+  };
+
+  // Print timetable
+  const handlePrint = () => {
+    sound.playPop();
+    window.print();
+  };
 
   // Filter exams
   const filteredExams = exams.filter((exam) => {
@@ -66,6 +108,15 @@ export default function ExamTimetable({ exams, onOpenEdit }) {
 
           <div className="flex flex-wrap items-center gap-2.5">
             <button
+              onClick={handlePrint}
+              className="px-3.5 py-2 rounded-2xl bg-white hover:bg-pink-50 text-slate-700 border border-pink-200 text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 shadow-2xs"
+              title="Print Timetable for Study Desk"
+            >
+              <Printer className="w-3.5 h-3.5 text-pink-500" />
+              <span>Print Timetable</span>
+            </button>
+
+            <button
               onClick={() => {
                 sound.playPop();
                 onOpenEdit();
@@ -85,6 +136,66 @@ export default function ExamTimetable({ exams, onOpenEdit }) {
             <span className="font-bold text-pink-900">Personalized & Fully Configurable: </span>
             The dates below represent the standard CBSE Class 10 examination slot (10:30 AM – 01:30 PM). As soon as your school issues your official admit card / hall ticket, you can click <span className="font-semibold text-pink-600">"Edit / Update Timetable"</span> to fine-tune dates, subject codes, and room numbers!
           </div>
+        </div>
+
+        {/* Exam Hall Bag Checklist Collapsible Button */}
+        <div className="mb-6">
+          <button
+            onClick={() => {
+              setShowChecklist(!showChecklist);
+              sound.playPop();
+            }}
+            className="w-full p-4 rounded-2xl bg-white border border-pink-200 hover:bg-pink-50/40 text-left flex items-center justify-between shadow-xs transition-colors"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="text-xl">🎒</span>
+              <div>
+                <span className="text-sm font-bold font-cute text-slate-800">
+                  CBSE Exam Hall Bag Checklist
+                </span>
+                <span className="text-xs text-slate-500 ml-2 font-medium hidden sm:inline">
+                  (Make sure everything is ready the night before each exam!)
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-pink-600 bg-pink-50 px-2.5 py-0.5 rounded-full border border-pink-200">
+                {hallChecklist.filter((i) => i.checked).length}/{hallChecklist.length} Ready
+              </span>
+              {showChecklist ? <ChevronUp className="w-4 h-4 text-pink-500" /> : <ChevronDown className="w-4 h-4 text-pink-500" />}
+            </div>
+          </button>
+
+          {showChecklist && (
+            <div className="mt-2 p-5 rounded-2xl bg-pink-50/40 border border-pink-100 space-y-2.5 animate-fade-in">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                {hallChecklist.map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => toggleChecklistItem(item.id)}
+                    className={`p-3 rounded-xl border text-xs flex items-start gap-2.5 cursor-pointer transition-all ${
+                      item.checked
+                        ? 'bg-emerald-50/60 border-emerald-200 text-slate-700'
+                        : 'bg-white border-pink-100 hover:border-pink-300 text-slate-600'
+                    }`}
+                  >
+                    <div
+                      className={`w-4 h-4 rounded mt-0.5 flex items-center justify-center shrink-0 border ${
+                        item.checked
+                          ? 'bg-emerald-500 border-emerald-500 text-white'
+                          : 'border-slate-300 bg-white'
+                      }`}
+                    >
+                      {item.checked && <Check className="w-3 h-3 stroke-[3]" />}
+                    </div>
+                    <span className={item.checked ? 'line-through text-slate-400 font-medium' : 'font-medium'}>
+                      {item.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Filter Pills */}
@@ -107,7 +218,7 @@ export default function ExamTimetable({ exams, onOpenEdit }) {
 
         {/* Timetable Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filteredExams.map((exam, index) => {
+          {filteredExams.map((exam) => {
             const daysLeft = getDaysLeft(exam.date);
             const isCompleted = daysLeft === 'Completed';
 
@@ -183,4 +294,3 @@ export default function ExamTimetable({ exams, onOpenEdit }) {
     </section>
   );
 }
-
